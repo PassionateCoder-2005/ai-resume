@@ -7,8 +7,35 @@ if(!process.env.MONGODB_URI){
 if(!process.env.JWT_SECRET){
     throw new Error("JWT secret not found");
 }
-
+// if(!process.env.IMAGE_KIT_PUBLIC_KEY){
+//     throw new Error("Image kit public key not found");
+// }
+// if(!process.env.IMAGE_KIT_PRIVATE_KEY){
+//     throw new Error("Image kit private key not found");
+// }
+// if(!process.env.IMAGE_KIT_URL_ENDPOINT){
+//     throw new Error("Image kit url endpoint not found");
+// }
+if(!process.env.CLOUDINARY_CLOUD_NAME){
+    throw new Error("Cloudinary cloud name not found");
+}
+if(!process.env.CLOUDINARY_API_KEY){
+    throw new Error("Cloudinary api key not found");
+}
+if(!process.env.CLOUDINARY_API_SECRET){
+    throw new Error("Cloudinary api secret not found");
+}
+if(!process.env.GEMINI_KEY){
+    throw new Error("Gemini key not found");
+}
 export const CONFIG={
     MONGODB_URI:process.env.MONGODB_URI,
-    JWT_SECRET:process.env.JWT_SECRET
+    JWT_SECRET:process.env.JWT_SECRET,
+    IMAGE_KIT_PUBLIC_KEY:process.env.IMAGE_KIT_PUBLIC_KEY,
+    IMAGE_KIT_PRIVATE_KEY:process.env.IMAGE_KIT_PRIVATE_KEY,
+    IMAGE_KIT_URL_ENDPOINT:process.env.IMAGE_KIT_URL_ENDPOINT,
+    CLOUDINARY_CLOUD_NAME:process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY:process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET:process.env.CLOUDINARY_API_SECRET,
+    GEMINI_KEY:process.env.GEMINI_KEY
 }

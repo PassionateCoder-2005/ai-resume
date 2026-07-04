@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken"
+import { CONFIG } from "../config/config.js";
 export const checkHrRole = (req,res,next) => {
     try {
         const userRole = req.user.role;
@@ -21,6 +23,9 @@ export const checkCandidateRole = (req,res,next) => {
                 message: "Forbidden"
             })
         }
+        const token=req.cookies.token;
+        const decode=jwt.verify(token,CONFIG.JWT_SECRET)
+        req.user=decode;
         next()
     }
     catch (error) {
