@@ -28,6 +28,12 @@ if(!process.env.CLOUDINARY_API_SECRET){
 if(!process.env.GEMINI_KEY){
     throw new Error("Gemini key not found");
 }
+if(!process.env.GEMINI_KEY_ONE){
+    throw new Error("Gemini key one not found");
+}
+if(!process.env.GEMINI_KEY_TWO){
+    throw new Error("Gemini key two not found");
+}
 export const CONFIG={
     MONGODB_URI:process.env.MONGODB_URI,
     JWT_SECRET:process.env.JWT_SECRET,
@@ -37,5 +43,7 @@ export const CONFIG={
     CLOUDINARY_CLOUD_NAME:process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY:process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET:process.env.CLOUDINARY_API_SECRET,
-    GEMINI_KEY:process.env.GEMINI_KEY
+    GEMINI_KEY:process.env.GEMINI_KEY,
+    GEMINI_KEY_ONE:process.env.GEMINI_KEY_ONE,
+    GEMINI_KEY_TWO:process.env.GEMINI_KEY_TWO
 }
