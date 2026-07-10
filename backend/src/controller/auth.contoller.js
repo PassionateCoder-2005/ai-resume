@@ -26,10 +26,12 @@ export const register=async (req,res) => {
         },CONFIG.JWT_SECRET,{
             expiresIn:"1h"
         })
-        res.cookie("token",token,{
-            httpOnly:true,
-            maxAge:3600000
-        })
+       res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 3600000,
+})
 
         return res.status(201).json({
             message:"User registered successfully",
@@ -69,10 +71,12 @@ export const login=async (req,res) => {
         },CONFIG.JWT_SECRET,{
             expiresIn:"1h"
         })
-        res.cookie("token",token,{
-            httpOnly:true,
-            maxAge:3600000
-        })
+        res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 3600000,
+})
         return res.status(200).json({
             message:"Login successful",
             user:{
