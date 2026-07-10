@@ -12,7 +12,7 @@ server.get("/",(req,res)=>{
 }
 )
 server.use(cors({
-    origin: "*",
+    origin: "http://localhost:5173",
     credentials: true,
   }));
 server.use(express.json())
