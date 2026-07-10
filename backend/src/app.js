@@ -1,6 +1,7 @@
 import express from "express";
 import authRouter from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
+import cors from "cors"
 import uploadRouter from "./routes/upload.routes.js";
 import jobsRouter from "./routes/jobs.routes.js";
 import applicationRouter from "./routes/application.routes.js";
@@ -10,8 +11,13 @@ server.get("/",(req,res)=>{
     res.send("Welcome to the API")
 }
 )
+server.use(cors({
+    origin: "*",
+    credentials: true,
+  }));
 server.use(express.json())
 server.use(cookieParser())
+
 server.use("/api/auth",authRouter)
 server.use("/api/upload",uploadRouter)
 server.use("/api/job",jobsRouter)
