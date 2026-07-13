@@ -5,28 +5,40 @@ import path from "path";
 import crypto from "crypto";
 
 cloudinary.config({
-    cloud_name: CONFIG.CLOUDINARY_CLOUD_NAME,
-    api_key: CONFIG.CLOUDINARY_API_KEY,
-    api_secret: CONFIG.CLOUDINARY_API_SECRET,
+  cloud_name: CONFIG.CLOUDINARY_CLOUD_NAME,
+  api_key: CONFIG.CLOUDINARY_API_KEY,
+  api_secret: CONFIG.CLOUDINARY_API_SECRET,
 });
 
 export const uploadService = async (file) => {
-    const ext = path.extname(file.originalname);
-    const uniqueFileName = `${Date.now()}-${crypto.randomUUID()}${ext}`;
+  const ext = path.extname(file.originalname);
+  const uniqueFileName = `${Date.now()}-${crypto.randomUUID()}`;
 
-    return new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-            {
-                resource_type: "raw", // PDF ke liye
-                folder: "resume",
-                public_id: uniqueFileName.replace(ext, ""),
-            },
-            (error, result) => {
-                if (error) return reject(error);
-                resolve(result);
-            }
-        );
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: "raw",
+        folder: "resume",
+        public_id: uniqueFileName,
+        format: ext.replace(".", ""), // pdf
+      },
+      (error, result) => {
+        if (error) return reject(error);
 
-        streamifier.createReadStream(file.buffer).pipe(uploadStream);
-    });
+        // PDF extension ke saath URL generate karo
+        const resumeUrl = cloudinary.url(result.public_id, {
+          resource_type: "raw",
+          format: ext.replace(".", ""),
+          secure: true,
+        });
+
+        resolve({
+          ...result,
+          secure_url: resumeUrl,
+        });
+      }
+    );
+
+    streamifier.createReadStream(file.buffer).pipe(uploadStream);
+  });
 };
