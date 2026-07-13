@@ -12,7 +12,7 @@ export const uploadFile = async (req, res) => {
         const parsed= await parsePDF(req.file.buffer);
          const resume = await resumeModel.create({
             title,
-            resumeUrl: file.secure_url,
+            resumeUrl: file.url,
             user: req.user.id,          
         });
        const aiAnalysis = JSON.parse(await aiResponse(parsed));

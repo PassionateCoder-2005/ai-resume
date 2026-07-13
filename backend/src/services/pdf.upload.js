@@ -1,32 +1,34 @@
-import { v2 as cloudinary } from "cloudinary";
-import streamifier from "streamifier";
-import { CONFIG } from "../config/config.js";
+import { createClient } from "@supabase/supabase-js";
 import path from "path";
 import crypto from "crypto";
-
-cloudinary.config({
-  cloud_name: CONFIG.CLOUDINARY_CLOUD_NAME,
-  api_key: CONFIG.CLOUDINARY_API_KEY,
-  api_secret: CONFIG.CLOUDINARY_API_SECRET,
-});
+import { CONFIG } from "../config/config.js";
 
 export const uploadService = async (file) => {
+     const supabase = createClient(
+  CONFIG.SUPABASE_URL,
+  CONFIG.SUPABASE_SERVICE_ROLE_KEY
+);
+
   const ext = path.extname(file.originalname);
-  const uniqueFileName = `${Date.now()}-${crypto.randomUUID()}${ext}`;
+  const fileName = `${Date.now()}-${crypto.randomUUID()}${ext}`;
 
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        resource_type: "raw",
-        folder: "resume",
-        public_id: uniqueFileName,
-      },
-      (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      }
-    );
+  const { error } = await supabase.storage
+    .from("resume")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+      upsert: false,
+    });
 
-    streamifier.createReadStream(file.buffer).pipe(uploadStream);
-  });
+  if (error) {
+    throw error;
+  }
+
+  const { data } = supabase.storage
+    .from("resume")
+    .getPublicUrl(fileName);
+
+  return {
+    url: data.publicUrl,
+    fileName,
+  };
 };

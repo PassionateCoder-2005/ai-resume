@@ -7,15 +7,7 @@ if(!process.env.MONGODB_URI){
 if(!process.env.JWT_SECRET){
     throw new Error("JWT secret not found");
 }
-// if(!process.env.IMAGE_KIT_PUBLIC_KEY){
-//     throw new Error("Image kit public key not found");
-// }
-// if(!process.env.IMAGE_KIT_PRIVATE_KEY){
-//     throw new Error("Image kit private key not found");
-// }
-// if(!process.env.IMAGE_KIT_URL_ENDPOINT){
-//     throw new Error("Image kit url endpoint not found");
-// }
+
 if(!process.env.CLOUDINARY_CLOUD_NAME){
     throw new Error("Cloudinary cloud name not found");
 }
@@ -34,6 +26,13 @@ if(!process.env.GEMINI_KEY_ONE){
 if(!process.env.GEMINI_KEY_TWO){
     throw new Error("Gemini key two not found");
 }
+if(!process.env.SUPABASE_SERVICE_ROLE_KEY){
+    throw new Error("Supabase service key two not found");
+}
+if(!process.env.SUPABASE_URL){
+    throw new Error("Supabase URL key two not found");
+}
+
 export const CONFIG={
     MONGODB_URI:process.env.MONGODB_URI,
     JWT_SECRET:process.env.JWT_SECRET,
@@ -45,5 +44,7 @@ export const CONFIG={
     CLOUDINARY_API_SECRET:process.env.CLOUDINARY_API_SECRET,
     GEMINI_KEY:process.env.GEMINI_KEY,
     GEMINI_KEY_ONE:process.env.GEMINI_KEY_ONE,
-    GEMINI_KEY_TWO:process.env.GEMINI_KEY_TWO
+    GEMINI_KEY_TWO:process.env.GEMINI_KEY_TWO,
+    SUPABASE_SERVICE_ROLE_KEY:process.env.SUPABASE_SERVICE_ROLE_KEY,
+    SUPABASE_URL:process.env.SUPABASE_URL
 }
