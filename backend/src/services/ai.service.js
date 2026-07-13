@@ -227,3 +227,96 @@ Return ONLY this JSON:
 
 return interaction.output_text
 }
+export const aiRecommendJobs=async(aiAnalysis,jobList) => {
+  const ai = new GoogleGenAI({
+    apiKey:CONFIG.GEMINI_KEY_TWO
+  });
+ const interaction = await ai.interactions.create({
+  model: "gemini-3.5-flash",
+  input: `
+Candidate Resume Analysis:
+${JSON.stringify(aiAnalysis, null, 2)}
+
+Job List:
+${JSON.stringify(jobList, null, 2)}
+`,
+  system_instruction: `
+You are an expert AI Career Advisor and Technical Recruiter.
+
+Your task is to recommend the most suitable jobs for the candidate based ONLY on:
+
+- Candidate Resume Analysis
+- Available Job List
+
+Strict Rules:
+
+1. Use ONLY the information provided in the Candidate Resume Analysis and Job List.
+2. Never invent or assume any skills, experience, education, certifications, projects, achievements, or technologies.
+3. Compare every job in the Job List with the candidate profile.
+4. Calculate an estimated matchScore between 0 and 100.
+5. Skills should have the highest priority while calculating the score.
+6. Also consider:
+   - Experience
+   - Education
+   - Projects
+   - Technologies
+   - Job Role
+7. Recommend only relevant jobs.
+8. Ignore jobs having matchScore below 40.
+9. Sort recommended jobs by matchScore in descending order.
+10. Return a maximum of 10 recommended jobs.
+11. Do not recommend duplicate jobs.
+12. Every recommended job MUST exist in the provided Job List.
+13. Never modify job title or company name.
+14. Never create fake jobs.
+15. recommendation must be exactly one of:
+    - Highly Recommended
+    - Recommended
+    - Average Match
+16. matchedSkills must contain only skills common between candidate and job.
+17. missingSkills must contain only required job skills that are absent in the candidate profile.
+18. reason must be short (maximum 30 words).
+19. Return ONLY valid JSON.
+20. Do NOT return markdown.
+21. Do NOT wrap the response inside \`\`\`json.
+22. Do NOT include any explanation outside the JSON.
+23. If there are no suitable jobs, return an empty array.
+
+Return ONLY this JSON structure:
+
+{
+  "recommendedJobs": [
+    {
+      "jobId": "",
+      "title": "",
+      "company": "",
+      "matchScore": 0,
+      "matchedSkills": [],
+      "missingSkills": [],
+      "recommendation": "",
+      "reason": ""
+    }
+  ]
+}
+
+Field Rules:
+
+- jobId: Use the exact _id from the Job List.
+- title: Use the exact title from the Job List.
+- company: Use the exact company name from the Job List.
+- matchScore: Integer between 0 and 100.
+- matchedSkills: Array of matching skills.
+- missingSkills: Array of missing required skills.
+- recommendation: One of "Highly Recommended", "Recommended", or "Average Match".
+- reason: Short explanation (maximum 30 words).
+
+If no suitable jobs are found, return exactly:
+
+{
+  "recommendedJobs": []
+}
+`
+});
+
+return interaction.output_text;
+}

@@ -1,6 +1,7 @@
 import applicationModel from "../models/application.model.js"
 import jobModel from "../models/job.model.js"
 import resumeModel from "../models/resume.model.js"
+import { aiRecommendJobs } from "../services/ai.service.js"
 export const createJobs = async (req, res) => {
     try {
         const { title, description, company, location, requiredSkills, salary } = req.body
@@ -87,6 +88,69 @@ export const getJobAllDetails = async (req, res) => {
     } catch (error) {
         console.error(error);
 
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};
+export const getOneJobDetails = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const job = await jobModel.findById(id);
+        if (!job) {
+            return res.status(404).json({
+                message: "Job not found"
+            });
+        }
+        return res.status(200).json({
+            message: "Job details fetched successfully",
+            job
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};
+export const deleteJob = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id;
+        const job = await jobModel.findOneAndDelete({ _id: id, createdBy: userId });
+        if (!job) {
+            return res.status(404).json({
+                message: "Job not found"
+            });
+        }
+        return res.status(200).json({
+            message: "Job deleted successfully"
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};
+export const recommendJobs = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const resume = await resumeModel.findOne({ user: userId });
+        const jobList = await jobModel.find();
+        const recommendedJobs = await aiRecommendJobs(
+    resume.aiAnalysis,
+    jobList
+);
+
+const parsed = JSON.parse(recommendedJobs);
+
+return res.status(200).json({
+    message: "Recommended jobs fetched successfully",
+    recommendedJobs: parsed.recommendedJobs
+});
+    } catch (error) {
+        console.error(error);
         return res.status(500).json({
             message: "Internal server error"
         });

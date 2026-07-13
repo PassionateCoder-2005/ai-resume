@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer"
 import { isLoggedIn } from "../middleware/auth.middleware.js";
 import { checkCandidateRole } from "../middleware/role.middleware.js";
-import { uploadFile } from "../controller/file.controller.js";
+import { uploadFile ,getResumeById} from "../controller/file.controller.js";
 import fileValidation from "../validation/file.validation.js";
 const uploadRouter=Router()
 const storage = multer.memoryStorage()
@@ -11,4 +11,5 @@ const upload=multer({
     limits:5*1024*1024
 })
 uploadRouter.post("/resume",isLoggedIn,checkCandidateRole,upload.single("pdf"),fileValidation,uploadFile)
+uploadRouter.get("/resume/:id",isLoggedIn,checkCandidateRole,getResumeById)
 export default uploadRouter;
