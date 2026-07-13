@@ -9,7 +9,7 @@ export const uploadFile = async (req, res) => {
         const file = await uploadService(req.file);
 
         const title = path.parse(req.file.originalname).name;
-        const parsed= await parsePDF(file);
+        const parsed= await parsePDF(req.file.buffer);
          const resume = await resumeModel.create({
             title,
             resumeUrl: file.secure_url,

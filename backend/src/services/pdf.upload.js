@@ -12,7 +12,7 @@ cloudinary.config({
 
 export const uploadService = async (file) => {
   const ext = path.extname(file.originalname);
-  const uniqueFileName = `${Date.now()}-${crypto.randomUUID()}`;
+  const uniqueFileName = `${Date.now()}-${crypto.randomUUID()}${ext}`;
 
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
@@ -20,22 +20,10 @@ export const uploadService = async (file) => {
         resource_type: "raw",
         folder: "resume",
         public_id: uniqueFileName,
-        format: ext.replace(".", ""), // pdf
       },
       (error, result) => {
         if (error) return reject(error);
-
-        // PDF extension ke saath URL generate karo
-        const resumeUrl = cloudinary.url(result.public_id, {
-          resource_type: "raw",
-          format: ext.replace(".", ""),
-          secure: true,
-        });
-
-        resolve({
-          ...result,
-          secure_url: resumeUrl,
-        });
+        resolve(result);
       }
     );
 
