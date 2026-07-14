@@ -10,12 +10,25 @@ export const uploadFile = async (req, res) => {
 
         const title = path.parse(req.file.originalname).name;
         const parsed= await parsePDF(req.file.buffer);
+        await resumeModel.updateMany(
+    {
+        user: req.user.id,
+        isActive: true,
+    },
+    {
+        $set: {
+            isActive: false,
+        },
+    }
+);
          const resume = await resumeModel.create({
             title,
             resumeUrl: file.url,
-            user: req.user.id,          
+            user: req.user.id,
+            isActive:true          
         });
        const aiAnalysis = JSON.parse(await aiResponse(parsed));
+
    const updatedResume = await resumeModel.findByIdAndUpdate(
     resume._id,
     { aiAnalysis },
@@ -39,9 +52,8 @@ export const uploadFile = async (req, res) => {
 };
 export const getResumeById = async (req, res) => {
     try {
-        const { id } = req.params;
         const userId = req.user.id;
-        const resume = await resumeModel.find({ _id: id, user: userId });
+        const resume = await resumeModel.find({user: userId,isActive:true });
         if (!resume) {
             return res.status(404).json({
                 message: "Resume not found"

@@ -18,11 +18,10 @@ const resumeSchema=new mongoose.Schema({
         type:Object,
         default:{}
     },
-    status:{
-        type:String,
-        enum:["pending","approved","rejected"],
-        default:"pending"
-    }
+    isActive:{
+        type:Boolean,
+        default:false
+    } 
 },{
     timestamps:true
 })

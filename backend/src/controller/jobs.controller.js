@@ -12,6 +12,7 @@ export const createJobs = async (req, res) => {
             job
         })
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             message: "Internal server error"
         })
@@ -41,7 +42,10 @@ export const getJobAllDetails = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const job = await jobModel.findById(id);
+        const job = await jobModel.find({
+            _id:id,
+            createdBy:req.user.id
+        });
 
         if (!job) {
             return res.status(404).json({
@@ -50,7 +54,7 @@ export const getJobAllDetails = async (req, res) => {
         }
 
         const applications = await applicationModel
-            .find({ job: id })
+            .find({job:id})
             .populate("candidate", "name email")
             .populate("job", "title company");
 

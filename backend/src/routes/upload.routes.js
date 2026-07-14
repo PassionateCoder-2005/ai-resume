@@ -11,5 +11,5 @@ const upload=multer({
     limits:5*1024*1024
 })
 uploadRouter.post("/resume",isLoggedIn,checkCandidateRole,upload.single("pdf"),fileValidation,uploadFile)
-uploadRouter.get("/resume/:id",isLoggedIn,checkCandidateRole,getResumeById)
+uploadRouter.get("/get-your/resume",isLoggedIn,checkCandidateRole,getResumeById)
 export default uploadRouter;
