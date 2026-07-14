@@ -127,4 +127,47 @@ export const getAllApplicationsOfCandidate = async (req, res) => {
     });
   }
 };
-// export const getAllApplicationsForHr
+
+export const getAllApplicationsForHr = async (req, res) => {
+  try {
+    const hrId = req.user.id;
+    const hrJobs = await jobModel.find({ createdBy: hrId }).select("_id");
+
+    if (hrJobs.length === 0) {
+      return res.status(200).json({
+        message: "No jobs created by you yet",
+        applications: [],
+      });
+    }
+
+    const jobIds = hrJobs.map((job) => job._id);
+
+    const applications = await applicationModel
+      .find({ job: { $in: jobIds } })
+      .populate({
+        path: "candidate",
+        select: "name email role",
+      })
+      .populate({
+        path: "job",
+        select: "title company location salary requiredSkills",
+      })
+      .populate({
+        path: "resume",
+        select: "title resumeUrl aiAnalysis",
+      })
+      .sort({ appliedAt: -1 });
+
+    return res.status(200).json({
+      message: "Applications fetched successfully",
+      totalApplications: applications.length,
+      applications,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
