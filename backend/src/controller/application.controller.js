@@ -96,22 +96,35 @@ export const getOneApplicationOfCandidate = async (req, res) => {
     }
 }
 export const getAllApplicationsOfCandidate = async (req, res) => {
-    try {
-        const applications = await applicationModel.find({ candidate: req.user.id });
-        if (!applications) {
-            return res.status(404).json({
-                message: "No applications found"
-            })
-        }
-        return res.status(200).json({
-            message: "Applications fetched successfully",
-            applications
-        })
+  try {
+    const applications = await applicationModel
+      .find({ candidate: req.user.id })
+      .populate({
+        path: "job",
+        select: "title company location salary requiredSkills"
+      })
+      .populate({
+        path: "resume",
+        select: "title resumeUrl aiAnalysis"
+      });
+
+    if (applications.length === 0) {
+      return res.status(404).json({
+        message: "No applications found",
+        applications: [],
+      });
     }
-    catch (error) {
-        return res.status(500).json({
-            message: "Internal server error"
-        })
-    }
-}
+
+    return res.status(200).json({
+      message: "Applications fetched successfully",
+      applications,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
 // export const getAllApplicationsForHr

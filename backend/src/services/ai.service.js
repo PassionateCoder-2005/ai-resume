@@ -288,8 +288,6 @@ Return ONLY this JSON structure:
   "recommendedJobs": [
     {
       "jobId": "",
-      "title": "",
-      "company": "",
       "matchScore": 0,
       "matchedSkills": [],
       "missingSkills": [],
@@ -301,9 +299,10 @@ Return ONLY this JSON structure:
 
 Field Rules:
 
-- jobId: Use the exact _id from the Job List.
-- title: Use the exact title from the Job List.
-- company: Use the exact company name from the Job List.
+- Never return title.
+- Never return company.
+- Return only jobId.
+- Backend will attach original job details.
 - matchScore: Integer between 0 and 100.
 - matchedSkills: Array of matching skills.
 - missingSkills: Array of missing required skills.
