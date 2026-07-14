@@ -239,3 +239,24 @@ export const recommendJobs = async (req, res) => {
     });
   }
 };
+export const getAllJobCreatedByHr=async (req,res) => {
+    try {
+        const user=req.user.id;
+        const jobs=await jobModel.find({
+             createdBy:user
+        })
+        if(!jobs){
+            return res.status(404).json({
+                message:"Job not found"
+            })
+        }
+        return res.status(200).json({
+            message:"Your created jobs",
+            jobs
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message:"Internal server error"
+        })
+    }
+}
