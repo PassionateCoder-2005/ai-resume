@@ -32,6 +32,19 @@ if(!process.env.SUPABASE_SERVICE_ROLE_KEY){
 if(!process.env.SUPABASE_URL){
     throw new Error("Supabase URL key two not found");
 }
+if(!process.env.GEMINI_REAL_ONE){
+    throw new Error("Gemini real key one not found");
+}
+if(!process.env.GEMINI_REAL_TWO){
+    throw new Error("Gemini real key two not found");
+}
+if(!process.env.GEMINI_REAL_THREE){
+    throw new Error("Gemini real key three not found");
+}
+if(!process.env.GEMINI_REAL_FOUR){
+    throw new Error("Gemini real key four not found");
+}
+
 
 export const CONFIG={
     MONGODB_URI:process.env.MONGODB_URI,
@@ -46,5 +59,9 @@ export const CONFIG={
     GEMINI_KEY_ONE:process.env.GEMINI_KEY_ONE,
     GEMINI_KEY_TWO:process.env.GEMINI_KEY_TWO,
     SUPABASE_SERVICE_ROLE_KEY:process.env.SUPABASE_SERVICE_ROLE_KEY,
-    SUPABASE_URL:process.env.SUPABASE_URL
+    SUPABASE_URL:process.env.SUPABASE_URL,
+    GEMINI_REAL_ONE:process.env.GEMINI_REAL_ONE,
+    GEMINI_REAL_TWO:process.env.GEMINI_REAL_TWO,
+    GEMINI_REAL_THREE:process.env.GEMINI_REAL_THREE,
+    GEMINI_REAL_FOUR:process.env.GEMINI_REAL_FOUR
 }

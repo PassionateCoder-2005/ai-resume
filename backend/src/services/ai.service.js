@@ -3,7 +3,7 @@ import { CONFIG } from "../config/config.js";
 
 export const aiResponse=async (resume) => {
     const ai = new GoogleGenAI({
-        apiKey:CONFIG.GEMINI_KEY
+        apiKey:CONFIG.GEMINI_REAL_TWO
     });
   const interaction = await ai.interactions.create({
   model: "gemini-3.5-flash",
@@ -62,7 +62,7 @@ return interaction.output_text;
 }
 export const aiMatch=async (aiAnalysis,jobDescription,jobRequiredSkills,jobTitle) => {
   const ai = new GoogleGenAI({
-    apiKey:CONFIG.GEMINI_KEY_ONE
+    apiKey:CONFIG.GEMINI_REAL_ONE
   });
 
 const interaction = await ai.interactions.create({
@@ -149,7 +149,7 @@ return interaction.output_text;
 }
 export const aiInterviewQuestions=async (aiAnalysis,jobDescription,jobRequiredSkills,jobTitle) => {
   const ai = new GoogleGenAI({
-    apiKey:CONFIG.GEMINI_KEY_TWO
+    apiKey:CONFIG.GEMINI_REAL_THREE
   });
 
 const interaction = await ai.interactions.create({
@@ -229,7 +229,7 @@ return interaction.output_text
 }
 export const aiRecommendJobs=async(aiAnalysis,jobList) => {
   const ai = new GoogleGenAI({
-    apiKey:CONFIG.GEMINI_KEY_TWO
+    apiKey:CONFIG.GEMINI_REAL_FOUR
   });
  const interaction = await ai.interactions.create({
   model: "gemini-3.5-flash",
